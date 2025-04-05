@@ -1,57 +1,57 @@
 // @imports css
 
-import '../pages/index.css';
+import "../pages/index.css";
 
 // @imports js
 
-import {initialCards} from './cards.js';
+import { initialCards } from "./cards.js";
+
+import { createCard, deleteCard } from "../components/card.js";
+
+import {
+  editPopap,
+  closePopupOverlay,
+  closePopup,
+  openImgPopup,
+  openPopup,
+  editForm,
+  popup,
+  editButton,
+  newCardPopup,
+  addButton,
+  editPopup,
+  buttonPopupClose,
+  placesList,
+  profileDescription,
+  profileTitle,
+  popupInputDescription,
+  popupInputName
+} from "../components/popup.js";
 
 // @todo: Темплейт карточки
-const templateCard = document.querySelector('#card-template').content;
-const cardsList = document.querySelector('.places__list');
+
+const cardsList = document.querySelector(".places__list");
+
 // @todo: DOM узлы
-// @todo: Функция создания карточки 
-
-function createCard(dataCard, deleteCard) {
-  const card = templateCard.querySelector('.card').cloneNode(true);
-  const cardDeleteButton = card.querySelector('.card__delete-button');
-  const cardImage = card.querySelector('.card__image');
-  const cardTitle = card.querySelector('.card__title');
-
-  cardImage.src = dataCard.link;
-  cardImage.alt = dataCard.name;
-  cardTitle.textContent = dataCard.name;
-
-  cardDeleteButton.addEventListener('click', deleteCard);
-  return card;
-};
-
-// @todo: Функция удаления карточки
-
-const deleteCard = function (event) {
-  event.target.closest('.card').remove();
-};
-
 // @todo: Вывести карточки на страницу
 
-initialCards.forEach((card, index) => {
-  cardsList.append(createCard(card, deleteCard))
+initialCards.forEach((card) => {
+  cardsList.append(createCard(card, deleteCard));
 });
 
+editButton.addEventListener("click", () => {
+  popupInputName.value = profileTitle.textContent;
+  popupInputDescription.value = profileDescription.textContent;
+  openPopup(editPopup);
+});
 
+addButton.addEventListener("click", () => openPopup(newCardPopup));
 
+placesList.addEventListener("click", openImgPopup);
 
+popup.forEach((item) => item.addEventListener("click", closePopupOverlay));
 
+buttonPopupClose.forEach((item) => item.addEventListener("click", closePopup));
 
+editForm.addEventListener("submit", editPopap);
 
-
-
-
-
-
-
-
-
-
-
-//мне очень стыдно за то что я не слышал ваши коментарии(. надеюсь я исправился
