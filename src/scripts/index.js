@@ -8,26 +8,31 @@ import { initialCards } from "./cards.js";
 import { createCard, deleteCard, likeTheCard } from "../components/card.js";
 
 import {
-  addButton,
   addCard,
-  addForm,
-  buttonPopupClose,
-  cardsList,
-  closePopup,
+  editsPopup,
   closePopupOverlay,
-  editButton,
-  editForm,
-  editPopap,
-  editPopup,
-  newCardPopup,
+  closePopup,
   openImgPopup,
   openPopup,
+  popupTypeImage,
+  addForm,
+  editForm,
   popup,
-  popupInputDescription,
-  popupInputName,
+  editButton,
+  newCardPopup,
+  addButton,
+  editPopup,
   profileDescription,
   profileTitle,
+  popupInputDescription,
+  popupInputName,
+  cardsList
 } from "../components/popup.js";
+
+// ─── DOM ──────────────────────────
+const editPopupCloseButton = editPopup.querySelector('.popup__close')
+const addPopupCloseButton = newCardPopup.querySelector('.popup__close')
+const ImegePopupCloseButton = popupTypeImage.querySelector('.popup__close')
 
 // ─── Инициализация карточек ──────────────────────────
 initialCards.forEach((card) => {
@@ -50,13 +55,17 @@ editButton.addEventListener("click", () => {
 addButton.addEventListener("click", () => openPopup(newCardPopup));
 
 // Закрытие попапов по клику на оверлей
-popup.forEach((item) => item.addEventListener("click", closePopupOverlay));
+editPopup.addEventListener("click", (evt) => closePopupOverlay(evt, editPopup));
+newCardPopup.addEventListener("click", (evt) => closePopupOverlay(evt, newCardPopup));
+popupTypeImage.addEventListener("click", (evt) => closePopupOverlay(evt, popupTypeImage));
 
 // Закрытие попапов по кнопке "крестик"
-buttonPopupClose.forEach((item) => item.addEventListener("click", closePopup));
+editPopupCloseButton.addEventListener("click", () => closePopup(editPopup));
+addPopupCloseButton.addEventListener("click", () => closePopup(newCardPopup));
+ImegePopupCloseButton.addEventListener("click", () => closePopup(popupTypeImage));
 
 // Сабмит формы редактирования профиля
-editForm.addEventListener("submit", editPopap);
+editForm.addEventListener("submit", editsPopup);
 
 // Сабмит формы добавления карточки
-addForm.addEventListener("submit", addCard);
+addForm.addEventListener("submit", (evt) => addCard(evt, createCard, deleteCard, likeTheCard, openImgPopup));

@@ -1,10 +1,7 @@
 //@import
 
-import { createCard, deleteCard, likeTheCard } from '../components/card.js';
-
 //@DOM
 const popup = document.querySelectorAll('.popup');
-const buttonPopupClose = document.querySelectorAll('.popup__close');
 
 // Профиль
 const profileTitle = document.querySelector('.profile__title');
@@ -13,7 +10,6 @@ const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 
 // Списки карточек
-const placesList = document.querySelector('.places__list');
 const cardsList = document.querySelector('.places__list');
 
 // Попапы
@@ -39,9 +35,8 @@ const popupInputCardUrl = newCardPopup.querySelector('.popup__input_type_url');
 
 //@OPEN POPUP
 function openPopup(popup) {
-  popup.classList.remove('popup_is-animated');
   popup.classList.add('popup_is-opened');
-  document.addEventListener('keydown', closePopupEsc);
+  document.addEventListener('keydown', (evt) => closePopupEsc(evt, popup));
 }
 
 function openImgPopup(evt) {
@@ -49,75 +44,69 @@ function openImgPopup(evt) {
     popupImgSrc.src = evt.target.src;
     popupImgSrc.alt = evt.target.alt;
     popupText.textContent = evt.target.alt;
-    popupTypeImage.classList.remove('popup_is-animated');
-    popupTypeImage.classList.add('popup_is-opened');
-    document.addEventListener('keydown', closePopupEsc);
+    openPopup(popupTypeImage)
   }
 }
-
 
 //@CLOSE POPUP
-function closePopup() {
-  const popupOpened = document.querySelector('.popup_is-opened');
-  if (popupOpened) {
-    popupOpened.classList.add('popup_is-animated');
-    popupOpened.classList.remove('popup_is-opened');
-    document.removeEventListener('keydown', closePopupEsc);
-  }
+
+function closePopup(popup) {
+  popup.classList.remove('popup_is-opened');
+  document.removeEventListener('keydown', closePopupEsc);
 }
 
-function closePopupEsc(evt) {
+function closePopupEsc(evt, popup) {
   if (evt.key === 'Escape') {
-    closePopup();
+    closePopup(popup);
   }
 }
 
-function closePopupOverlay(evt) {
+function closePopupOverlay(evt, popup) {
   if (evt.target === evt.currentTarget) {
-    closePopup();
+    closePopup(popup);
   }
 }
 
 
 //@EDIT PROFILE
-function editPopap(evt) {
+function editsPopup(evt) {
   evt.preventDefault();
   profileTitle.textContent = popupInputName.value;
   profileDescription.textContent = popupInputDescription.value;
-  closePopup();
+  closePopup(editPopup);
 }
 
 
 //@ADD NEW CARD
-function addCard(evt) {
+function addCard( evt, createCard, deleteCard, likeTheCard, openImgPopup) {
   evt.preventDefault();
   const dataNewCard = {
     name: popupInputCardName.value,
     link: popupInputCardUrl.value,
   };
-  cardsList.prepend(createCard(dataNewCard, deleteCard, likeTheCard));
+  cardsList.prepend(createCard(dataNewCard, deleteCard, likeTheCard, openImgPopup));
   addForm.reset();
-  closePopup();
+  closePopup(newCardPopup);
 }
+
 export {
   addCard,
-  editPopap,
-  closePopupOverlay,
-  closePopup,
-  openImgPopup,
-  openPopup,
-  addForm,
-  editForm,
-  popup,
-  editButton,
-  newCardPopup,
-  addButton,
-  editPopup,
-  buttonPopupClose,
-  placesList,
-  profileDescription,
-  profileTitle,
-  popupInputDescription,
-  popupInputName,
-  cardsList
-};
+    editsPopup,
+    closePopupOverlay,
+    closePopup,
+    openImgPopup,
+    openPopup,
+    popupTypeImage,
+    addForm,
+    editForm,
+    popup,
+    editButton,
+    newCardPopup,
+    addButton,
+    editPopup,
+    profileDescription,
+    profileTitle,
+    popupInputDescription,
+    popupInputName,
+    cardsList
+  };
