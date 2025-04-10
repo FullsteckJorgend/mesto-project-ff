@@ -13,26 +13,40 @@ import {
   closePopupOverlay,
   closePopup,
   openImgPopup,
-  openPopup,
-  popupTypeImage,
-  addForm,
-  editForm,
-  popup,
-  editButton,
-  newCardPopup,
-  addButton,
-  editPopup,
-  profileDescription,
-  profileTitle,
-  popupInputDescription,
-  popupInputName,
-  cardsList
+  openPopup
 } from "../components/popup.js";
 
 // ─── DOM ──────────────────────────
+const popup = document.querySelectorAll('.popup');
+
+// Профиль
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
+
+// Списки карточек
+const cardsList = document.querySelector('.places__list');
+
+// Попапы
+const editPopup = document.querySelector('.popup_type_edit');
+const newCardPopup = document.querySelector('.popup_type_new-card');
+const popupTypeImage = document.querySelector('.popup_type_image');
+
+// Формы
+const editForm = editPopup.querySelector('.popup__form');
+const addForm = newCardPopup.querySelector('.popup__form');
+
+// Инпуты
+const popupInputName = editPopup.querySelector('.popup__input_type_name');
+const popupInputDescription = editPopup.querySelector('.popup__input_type_description');
+
 const editPopupCloseButton = editPopup.querySelector('.popup__close')
 const addPopupCloseButton = newCardPopup.querySelector('.popup__close')
 const ImegePopupCloseButton = popupTypeImage.querySelector('.popup__close')
+
+
+
 
 // ─── Инициализация карточек ──────────────────────────
 initialCards.forEach((card) => {
