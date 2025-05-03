@@ -10,6 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mesto</title>
   </head>
+
   <body class="page">
     <div class="page__content">
       <header class="header page__section">
@@ -21,14 +22,12 @@
       </header>
       <main class="content">
         <section class="profile page__section">
-          <div
-            class="profile__image"
-            style="background-image: url(<%=require('./images/avatar.jpg')%>)"
-          ></div>
+          <div class="profile__image" style="background-image: url()"></div>
+
           <div class="profile__info">
-            <h1 class="profile__title">Жак-Ив Кусто</h1>
+            <h1 class="profile__title"></h1>
             <button class="profile__edit-button" type="button"></button>
-            <p class="profile__description">Исследователь океана</p>
+            <p class="profile__description"></p>
           </div>
           <button class="profile__add-button" type="button"></button>
         </section>
@@ -48,16 +47,33 @@
               type="text"
               name="name"
               class="popup__input popup__input_type_name"
+              id="input-name"
               placeholder="Имя"
+              minlength="2"
+              maxlength="40"
+              pattern="[a-zA-Zа-яА-ЯёЁ\s\-]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               required
             />
+            <span class="input-name-error input_error input-error-non-active"
+              >Вы пропустили это поле.</span
+            >
             <input
               type="text"
               name="description"
               class="popup__input popup__input_type_description"
+              id="input-description"
               placeholder="Занятие"
+              minlength="2"
+              maxlength="200"
+              pattern="[a-zA-Zа-яА-ЯёЁ\s\-]+"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               required
             />
+            <span
+              class="input-description-error input_error input-error-non-active"
+              >Вы пропустили это поле.</span
+            >
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
@@ -73,22 +89,61 @@
               type="text"
               name="place-name"
               class="popup__input popup__input_type_card-name"
+              id="input-type-card-name"
               placeholder="Название"
+              pattern="[a-zA-Zа-яА-ЯёЁ\s\-]+"
+              minlength="2"
+              maxlength="30"
+              data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               required
             />
+            <span
+              class="input-type-card-name-error input_error input-error-non-active"
+            ></span>
+
             <input
               type="url"
               name="link"
               class="popup__input popup__input_type_url"
+              id="input-type-url"
               placeholder="Ссылка на картинку"
+              pattern="https?://[^\s]+"
+              data-error-message="Введите адрес сайта."
               required
-            />
+            /><span
+              class="input-type-url-error input_error input-error-non-active"
+            ></span>
             <button type="submit" class="button popup__button">
               Сохранить
             </button>
           </form>
         </div>
       </div>
+
+      <div class="popup popup_type_edit-avatar">
+        <div class="popup__content">
+          <button type="button" class="popup__close"></button>
+          <h3 class="popup__title">Обновить аватар</h3>
+          <form class="popup__form" name="new-place">
+            <input
+              type="url"
+              name="link"
+              class="popup__input popup__input_type_url_avatar"
+              id="input-type-url-avatar"
+              placeholder="Ссылка на картинку"
+              pattern="https?://[^\s]+"
+              data-error-message="Введите адрес сайта."
+              required
+            /><span
+              class="input-type-url-avatar-error input_error input-error-non-active"
+            ></span>
+            <button type="submit" class="button popup__button">
+              Сохранить
+            </button>
+          </form>
+        </div>
+      </div>
+
       <div class="popup popup_type_image">
         <div class="popup__content popup__content_content_image">
           <button type="button" class="popup__close"></button>
@@ -104,7 +159,10 @@
         <button type="button" class="card__delete-button"></button>
         <div class="card__description">
           <h2 class="card__title"></h2>
-          <button type="button" class="card__like-button"></button>
+          <div class="like">
+            <button type="button" class="card__like-button"></button>
+            <span class="number-of-likes"></span>
+          </div>
         </div>
       </li>
     </template>
