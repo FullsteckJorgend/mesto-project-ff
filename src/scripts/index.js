@@ -77,8 +77,8 @@ const validationConfig = {
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "button_disabled",
-  inputErrorClass: "input_error",
   errorClass: "input-error-non-active",
+  errorSuffix: "-error",
 };
 
 // Открытие попапа изображения
@@ -94,17 +94,16 @@ export function openImgPopup(evt) {
 // Изменение профиля
 function editsPopup(evt) {
   evt.preventDefault();
-  profileTitle.textContent = popupInputName.value;
-  profileDescription.textContent = popupInputDescription.value;
-  console.log(editButton.textContent);
   APIProfileEdits(profileTitle, profileDescription)
     .then((res) => {
+      profileTitle.textContent = popupInputName.value;
+      profileDescription.textContent = popupInputDescription.value;
       closePopup(editPopup);
-      saveEdit.textContent = "Сохранить";
     })
     .catch((err) => {
       console.log(err);
-    });
+    })
+    .finally((saveEdit.textContent = "Сохранить"));
 }
 
 // Добавление карточки
@@ -115,8 +114,6 @@ function addCard(evt) {
     link: popupInputCardUrl.value,
     likes: [],
   };
-  addForm.reset();
-
   APIAddCard(dataNewCard.name, dataNewCard.link)
     .then((resFromServer) => {
       const cardElement = createCard(
@@ -127,10 +124,13 @@ function addCard(evt) {
       );
       cardsList.prepend(cardElement);
       closePopup(newCardPopup);
-      saveAddCard.textContent = "Сохранить";
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      saveEdit.textContent = "Сохранить";
+      addForm.reset();
     });
 }
 
@@ -138,15 +138,16 @@ function addCard(evt) {
 function avatarEdit(evt) {
   evt.preventDefault();
   const avatar = inputAvatar.value;
+
   APIAvatarEdit(avatar)
     .then((res) => {
       profileImage.style.backgroundImage = `url(${res.avatar})`;
       closePopup(popupAvatar);
-      saveAvatar.textContent = "Сохранить";
     })
     .catch((err) => {
       console.log(err);
-    });
+    })
+    .finally((saveEdit.textContent = "Сохранить"));
 }
 
 // ─── Анимация всех попапов при загрузке ───────────────
@@ -218,4 +219,18 @@ formAvatar.addEventListener("submit", (evt) => {
 enableValidation(validationConfig);
 
 // Синхронизация с API
-APIDataSynchronization(profileTitle, profileDescription, profileImage);
+APIDataSynchronization()
+  .then(([userData, cardsData]) => {
+    // Обновляем UI профиля
+    profileTitle.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    profileImage.style.backgroundImage = `url(${userData.avatar})`;
+    // Создаём карточки
+    cardsData.forEach((cardData) => {
+      cardsList.append(
+        createCard(cardData, deleteCard, likeTheCard, openImgPopup, userData)
+      );
+    });
+
+    return [userData, cardsData];
+  })

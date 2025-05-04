@@ -30,8 +30,11 @@ function createCard(dataCard, deleteCard, likeTheCard, openImgPopup, dataUser) {
   }
 
   cardDeleteButton.addEventListener("click", (evt) => {
-    deleteCard(evt);
-    APIDeleteCard(dataCard._id);
+    APIDeleteCard(dataCard._id)
+      .then(deleteCard(evt))
+      .catch((err) => {
+        console.log(err);
+      });
   });
   cardLikeButton.addEventListener("click", (evt) => {
     likeTheCard(evt, dataCard._id, numberLikeThe);

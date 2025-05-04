@@ -1,3 +1,6 @@
+// === импорты ===
+import { checkResponse } from "./utils/APIUtils.js";
+
 // === 📌 Константы ===
 const BASE_URL = "https://nomoreparties.co/v1/wff-cohort-37";
 const HEADERS = {
@@ -15,12 +18,7 @@ function APIProfileEdits(profileTitle, profileDescription) {
       name: profileTitle.textContent,
       about: profileDescription.textContent,
     }),
-  }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  });
+  }).then(checkResponse);
 }
 
 // === 👤 Аватар ===
@@ -33,12 +31,7 @@ function APIAvatarEdit(avatarLink) {
       avatar: avatarLink,
     }),
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(checkResponse)
     .then((res) => {
       console.log(res);
       return res;
@@ -53,12 +46,7 @@ function APIAddCard(name, link) {
     headers: HEADERS,
     body: JSON.stringify({ name, link }),
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(checkResponse)
     .then((res) => {
       console.log(res);
       return res;
@@ -70,12 +58,7 @@ function APIDeleteCard(id) {
     method: "DELETE",
     headers: HEADERS,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(checkResponse)
     .catch((err) => {
       console.log(err);
     });
@@ -88,12 +71,7 @@ function APIAddlike(id) {
     method: "PUT",
     headers: HEADERS,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(checkResponse)
     .then((res) => {
       return res;
     })
@@ -107,12 +85,7 @@ function APIRemovelike(id) {
     method: "DELETE",
     headers: HEADERS,
   })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
+    .then(checkResponse)
     .then((res) => {
       return res;
     })
@@ -124,44 +97,17 @@ function APIRemovelike(id) {
 // === 📦 Начальные данные ===
 
 const personPromis = fetch(`${BASE_URL}/users/me`, { headers: HEADERS }).then(
-  (res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  }
+  checkResponse
 );
 
 const cardPromis = fetch(`${BASE_URL}/cards`, { headers: HEADERS }).then(
-  (res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Ошибка: ${res.status}`);
-  }
+  checkResponse
 );
 
 // === 🔁 Синхронизация ===
 
-import { createCard, deleteCard, likeTheCard } from "../components/card.js";
-import { openImgPopup, cardsList } from "../scripts/index";
-
-function APIDataSynchronization(title, description, image) {
+function APIDataSynchronization() {
   return Promise.all([personPromis, cardPromis])
-    .then(([userData, cardsData]) => {
-      // Обновляем UI профиля
-      title.textContent = userData.name;
-      description.textContent = userData.about;
-      image.style.backgroundImage = `url(${userData.avatar})`;
-      // Создаём карточки
-      cardsData.forEach((cardData) => {
-        cardsList.append(
-          createCard(cardData, deleteCard, likeTheCard, openImgPopup, userData)
-        );
-      });
-
-      return [userData, cardsData];
-    })
     .catch((err) => {
       console.log(err);
     });

@@ -1,26 +1,28 @@
-function isValid(string, input) {
-  const textInputError = document.querySelector(`.${input.id}-error`);
+function isValid(string, input, config) {
+  const textInputError = document.querySelector(
+    `.${input.id}${config.errorSuffix}`
+  );
   const message = input.dataset.errorMessage;
   const pattern = input.getAttribute("pattern");
   const regex = new RegExp(pattern);
 
   if (input.validity.valid && regex.test(string) && string.length > 1) {
-    hideInputError(textInputError, input);
+    hideInputError(textInputError, input, config);
   } else if (input.validity.patternMismatch) {
-    showInputError(message, textInputError, input);
+    showInputError(message, textInputError, input, config);
   } else {
-    showInputError(input.validationMessage, textInputError, input);
+    showInputError(input.validationMessage, textInputError, input, config);
   }
 }
 
-function hideInputError(textInputError, input) {
-  textInputError.classList.add("input-error-non-active");
+function hideInputError(textInputError, input, config) {
+  textInputError.classList.add(config.errorClass);
   input.removeAttribute("style");
 }
 
-function showInputError(errorMessage, textInputError, input) {
+function showInputError(errorMessage, textInputError, input, config) {
   textInputError.textContent = errorMessage;
-  textInputError.classList.remove("input-error-non-active");
+  textInputError.classList.remove(config.errorClass);
   input.setAttribute("style", "border-bottom: 1px solid red;");
 }
 
@@ -41,8 +43,9 @@ function clearValidation(form, config) {
   const button = form.querySelector(config.submitButtonSelector);
 
   inputs.forEach((input) => {
-    const errorElement = form.querySelector(`.${input.id}-error`);
-    input.classList.remove(config.inputErrorClass);
+    const errorElement = form.querySelector(
+      `.${input.id}${config.errorSuffix}`
+    );
     if (errorElement) {
       errorElement.textContent = "";
       errorElement.classList.add(config.errorClass);
@@ -63,7 +66,7 @@ function enableValidation(config) {
 
     inputs.forEach((input) => {
       input.addEventListener("input", (evt) => {
-        isValid(evt.target.value, input);
+        isValid(evt.target.value, input, config);
         toggleButtonState(inputs, button, config);
       });
     });
