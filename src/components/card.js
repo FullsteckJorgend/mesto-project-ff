@@ -22,7 +22,9 @@ function createCard(dataCard, deleteCard, likeTheCard, openImgPopup, dataUser) {
     cardDeleteButton.remove();
   } else {
     cardDeleteButton.addEventListener("click", () => {
-      APIDeleteCard(dataCard._id);
+      APIDeleteCard(dataCard._id).catch((err) => {
+        console.log(err);
+      });
     });
   }
   if (isLikedByUser) {
@@ -58,11 +60,23 @@ function likeTheCard(event, id, numberLikeThe) {
   };
 
   if (isActive) {
-    APIRemovelike(id).then(updateLikes);
-    event.target.classList.remove("card__like-button_is-active");
+    APIRemovelike(id)
+      .then((res) => {
+        updateLikes(res);
+        event.target.classList.remove("card__like-button_is-active");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } else {
-    APIAddlike(id).then(updateLikes);
-    event.target.classList.add("card__like-button_is-active");
+    APIAddlike(id)
+      .then((res) => {
+        updateLikes(res);
+        event.target.classList.add("card__like-button_is-active");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 

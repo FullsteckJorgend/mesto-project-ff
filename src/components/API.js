@@ -57,11 +57,7 @@ function APIDeleteCard(id) {
   return fetch(`${BASE_URL}/cards/${id}`, {
     method: "DELETE",
     headers: HEADERS,
-  })
-    .then(checkResponse)
-    .catch((err) => {
-      console.log(err);
-    });
+  }).then(checkResponse);
 }
 
 // === ❤️ Лайки ===
@@ -74,9 +70,6 @@ function APIAddlike(id) {
     .then(checkResponse)
     .then((res) => {
       return res;
-    })
-    .catch((err) => {
-      console.log(err);
     });
 }
 
@@ -88,9 +81,6 @@ function APIRemovelike(id) {
     .then(checkResponse)
     .then((res) => {
       return res;
-    })
-    .catch((err) => {
-      console.log(err);
     });
 }
 
@@ -107,10 +97,7 @@ const cardPromis = fetch(`${BASE_URL}/cards`, { headers: HEADERS }).then(
 // === 🔁 Синхронизация ===
 
 function APIDataSynchronization() {
-  return Promise.all([personPromis, cardPromis])
-    .catch((err) => {
-      console.log(err);
-    });
+  return Promise.all([personPromis, cardPromis]);
 }
 
 // === ⬇️ Экспортируем всё что надо ===

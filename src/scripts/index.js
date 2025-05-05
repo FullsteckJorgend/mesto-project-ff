@@ -82,7 +82,7 @@ const validationConfig = {
 };
 
 // Открытие попапа изображения
-export function openImgPopup(evt) {
+function openImgPopup(evt) {
   if (evt.target.classList.contains("card__image")) {
     popupImgSrc.src = evt.target.src;
     popupImgSrc.alt = evt.target.alt;
@@ -234,3 +234,6 @@ APIDataSynchronization()
 
     return [userData, cardsData];
   })
+  .catch((err) => {
+    console.log(err);
+  });
